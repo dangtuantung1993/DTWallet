@@ -1,10 +1,10 @@
 
-const ETHPLORER_API = `http://api.ethplorer.io/getAddressInfo`
+const NEOSCAN_API = `https://api.neoscan.io/api/main_net/v1/get_balance`
 
 
-export const listeth = async (your_wallet) =>{
+export const listneo = async (your_wallet) =>{
     try {
-        let response = await fetch(`${ETHPLORER_API}/${your_wallet}?apiKey=freekey`, {
+        let response = await fetch(`${NEOSCAN_API}/${your_wallet}`, {
             method: 'GET',
 
         })

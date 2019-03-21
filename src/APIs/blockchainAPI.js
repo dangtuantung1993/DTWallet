@@ -1,14 +1,15 @@
 
-const ETHPLORER_API = `http://api.ethplorer.io/getAddressInfo`
+const BITCOIN = `https://blockchain.info/rawaddr`
 
 
-export const listeth = async (your_wallet) =>{
+export const listbtc = async (your_wallet) =>{
     try {
-        let response = await fetch(`${ETHPLORER_API}/${your_wallet}?apiKey=freekey`, {
+        let response = await fetch(`${BITCOIN}/${your_wallet}`, {
             method: 'GET',
 
         })
         let responseJson = await response.json();
+
 
         if (responseJson){
             return responseJson

@@ -1,6 +1,6 @@
 <template>
-    <div class="container-fluid" id="ether">
-       <div class="row">
+    <div class="container-fluid" id="neo">
+        <div class="row">
             <div class="col-lg-12" >
                 <div class="col-lg-12 select-cus" v-if="listname.length" >
                     <label class="typo__label"
@@ -24,21 +24,20 @@
                                     <th scope="col">STT</th>
                                     <th scope="col">Name</th>
                                     <th scope="col">Symbol</th>
-                                    <th scope="col">Contract</th>
                                     <th scope="col">Balance</th>
                                 </tr>
                                 </thead>
 
                                 <tbody >
-                                <tr v-for="(token, index) in tokens"
+                                <tr v-for="(NEP, index) in balances"
                                     :key="index">
                                     <th scope="col">{{index}}</th>
                                     <td >
-                                        {{token.tokenInfo.name}}
+                                        {{NEP.asset}}
                                     </td>
-                                    <td> {{ token.tokenInfo.symbol}}</td>
-                                    <td>{{token.tokenInfo.address}}</td>
-                                    <td>{{(token.balance / (Math.pow(10, parseInt(token.tokenInfo.decimals)))).toFixed(2)}}</td>
+                                    <td> {{ NEP.asset_symbol}}</td>
+
+                                    <td>{{NEP.amount}} {{ NEP.asset_symbol}}</td>
                                 </tr>
                                 </tbody>
 
@@ -80,13 +79,12 @@
 </template>
 
 <script>
-    import {list} from '../APIs/ethplorerAPI';
-    import Multiselect from 'vue-multiselect'
+    import {listbtc} from '../APIs/blockchainAPI';
+    import {Multiselect} from 'vue-multiselect'
 
     export default {
-        name: "Ether",
+        name: "BITCOIN",
         components:{
-
             Multiselect
         },
 
@@ -96,8 +94,8 @@
                 isshow2:false,
                 isshow: true,
                 wallets_input: '',
-                ethers: null,
-                tokens: {},
+                btcs: null,
+                balances: {},
                 list_wallets: [],
                 name:{ wal: 'Wallet'},
                 listname:[],
@@ -135,9 +133,10 @@
                 }
             },
             getDataFromAPI: async function (your_wallet) {
-                let eth = await list(your_wallet)
-                this.ethers = eth
-                this.tokens = eth.tokens
+                let btc = await listbtc(your_wallet)
+                this.btcs = btc
+                console.log(btc)
+
             },
             navigateToLogin(){
                 this.$router.push("Login")
@@ -181,14 +180,14 @@
         text-align: center;
         border-right:1px solid #ccc;
     }
-.table-hover th{
-    text-align: center;
-}
+    .table-hover th{
+        text-align: center;
+    }
     .table-hover td,.table-hover th{
         border-right:1px solid #ccc;
     }
     .table-hover tr:nth-child(even){
-background: #dcdbff;
+        background: #dcdbff;
     }
     .table-hover  tr:hover{
         background: #a6b6f3!important;
@@ -208,7 +207,7 @@ background: #dcdbff;
         transform: translateX(-50%);
         left: 50%;
     }
-.select-cus{
-    margin-top: 15px;
-}
+    .select-cus{
+        margin-top: 15px;
+    }
 </style>
