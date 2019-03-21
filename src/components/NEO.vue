@@ -122,7 +122,7 @@
                 for(var i = 0; i < list_wallets.length;i++){
                     this.listname.push({wal: list_wallets[i]})
                     await this.getDataFromAPI(`${list_wallets[i]}`)
-                    await this.wait(5000)
+                   
                 }
 
             },
