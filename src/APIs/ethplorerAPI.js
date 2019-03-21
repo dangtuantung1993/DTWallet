@@ -1,5 +1,5 @@
 
-const ETHPLORER_API = `http://api.ethplorer.io/getAddressInfo`
+const ETHPLORER_API = `https://api.ethplorer.io/getAddressInfo`
 
 
 export const listeth = async (your_wallet) =>{
