@@ -1,5 +1,8 @@
 <template>
-    <div class="container-fluid" id="neo">
+    <div class="container-fluid" id="BITCOIN">
+        <div class="logo">
+            <img src="../assets/img/bitcoin.svg">
+        </div>
         <div class="row">
             <div class="col-lg-12" >
                 <div class="col-lg-12 select-cus" v-if="listname.length" >
@@ -99,7 +102,8 @@
                 list_wallets: [],
                 name:{ wal: 'Wallet'},
                 listname:[],
-                error:[]
+                error:[],
+
             }
 
         },
@@ -125,6 +129,7 @@
                     await this.wait(5000)
                 }
 
+
             },
             checkForm() {
                 this.error = []
@@ -135,7 +140,8 @@
             getDataFromAPI: async function (your_wallet) {
                 let btc = await listbtc(your_wallet)
                 this.btcs = btc
-                console.log(btc)
+
+
 
             },
             navigateToLogin(){
@@ -163,6 +169,13 @@
 </style>
 
 <style scoped>
+    .logo {
+        width: 70%;
+        padding:20px 25px;
+        text-align: center;
+        display: block;
+        margin: 0 auto;
+    }
     .table-hover{
         font-family: 'Arial';
         font-size: 14px;

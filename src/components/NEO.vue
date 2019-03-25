@@ -1,5 +1,8 @@
 <template>
-    <div class="container-fluid" id="neo">
+    <div class="container-fluid" id="NEO">
+        <div class="logo">
+            <img src="../assets/img/neo.svg">
+        </div>
         <div class="row">
             <div class="col-lg-12" >
                 <div class="col-lg-12 select-cus" v-if="listname.length" >
@@ -121,8 +124,8 @@
                 let list_wallets = await this.wallets_input.split('\n')
                 for(var i = 0; i < list_wallets.length;i++){
                     this.listname.push({wal: list_wallets[i]})
-                    await this.getDataFromAPI(`${list_wallets[i]}`)
-                   
+
+
                 }
 
             },
@@ -163,6 +166,15 @@
 </style>
 
 <style scoped>
+    .logo {
+        width: 70%;
+        padding:20px 25px;
+        text-align: center;
+        display: block;
+        margin: 0 auto;
+    }
+
+
     .table-hover{
         font-family: 'Arial';
         font-size: 14px;

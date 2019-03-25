@@ -1,57 +1,28 @@
 <template>
     <div class="container-fluid" id="ether">
+        <div class="logo">
+            <img src="../assets/img/eth.svg">
+        </div>
        <div class="row">
             <div class="col-lg-12" >
-                <div class="col-lg-12 select-cus" v-if="listname.length" >
-                    <label class="typo__label"
-                    >Select with search</label>
-                    <multiselect v-model="name"
-                                 :options="listname"
-                                 :custom-label="nameWithLang"
-                                 placeholder="Select one"
-                                 label="wal"
-                                 track-by="wal"
-                                 @select="onSelect"
-                    ></multiselect>
-                </div>
-                <div class="col-lg-12"
-                     v-if="listname.length">
-                    <code >
-                        <div class="table" >
-                            <table class="table-hover" >
-                                <thead >
-                                <tr>
-                                    <th scope="col">STT</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Symbol</th>
-                                    <th scope="col">Contract</th>
-                                    <th scope="col">Balance</th>
-                                </tr>
-                                </thead>
-
-                                <tbody >
-                                <tr v-for="(token, index) in tokens"
-                                    :key="index">
-                                    <th scope="col">{{index}}</th>
-                                    <td >
-                                        {{token.tokenInfo.name}}
-                                    </td>
-                                    <td> {{ token.tokenInfo.symbol}}</td>
-                                    <td>{{token.tokenInfo.address}}</td>
-                                    <td>{{(token.balance / (Math.pow(10, parseInt(token.tokenInfo.decimals)))).toFixed(2)}}</td>
-                                </tr>
-                                </tbody>
-
-                            </table>
+                <ul class="boxwallet" data-toggle="modal" data-target="#myModal">
+                    <li v-for="wallet in wallets" :key="wallet.ethers.address" >
+                        <div class="address" v-if="wallet.tokens" >
+                            <label>{{wallet.ethers.address}}</label>
+                            <div>
+                                <label>Balance ETH:</label>
+                                <span>{{wallet.ethers.ETH.balance}}</span>
+                            </div>
+                            <div>{{wallet.tokens.length}}</div>
                         </div>
-                    </code>
-                </div>
 
-
+                    </li>
+                </ul>
+                <!-- Modal -->
             </div>
         </div>
         <div class="form-group" style="text-align: center">
-            <p v-if="!listname.length">
+            <p v-if="!wallets.length">
                 <textarea class="form-control"
                           style="margin:50px auto;width:50%;"
                           rows="5"
@@ -67,7 +38,7 @@
                 </span>
             </p>
         </div>
-        <button v-if="!listname.length"
+        <button v-if="!wallets.length"
                 type="button"
                 class="btn btn-success text-uppercase"
                 @click="send"
@@ -81,13 +52,12 @@
 
 <script>
     import {listeth} from '../APIs/ethplorerAPI';
-    import {Multiselect} from 'vue-multiselect'
+
 
     export default {
         name: "ETHEREUM",
         components:{
 
-            Multiselect
         },
 
         props: {},
@@ -98,8 +68,8 @@
                 wallets_input: '',
                 ethers: null,
                 tokens: {},
+                wallets: [],
                 list_wallets: [],
-                name:{ wal: 'Wallet'},
                 listname:[],
                 error:[]
             }
@@ -119,14 +89,11 @@
                 if (!result) {
                     return
                 }
-
                 let list_wallets = await this.wallets_input.split('\n')
                 for(var i = 0; i < list_wallets.length;i++){
-                    this.listname.push({wal: list_wallets[i]})
                     await this.getDataFromAPI(`${list_wallets[i]}`)
                     await this.wait(5000)
                 }
-
 
             },
             checkForm() {
@@ -139,77 +106,51 @@
                 let eth = await listeth(your_wallet)
                 this.ethers = eth
                 this.tokens = eth.tokens
-            },
-            navigateToLogin(){
-                this.$router.push("Login")
-            },
-            signOut(){
-                this.$session.destroy()
-                this.$router.push('/')
-            },
-            nameWithLang ({wal}) {
-                return `${wal}`
+                this.wallets.push({ ethers: eth, tokens: eth.tokens})
             },
 
-            onSelect (option) {
-                this.getDataFromAPI(option.wal);
-            },
         },
     }
 
 </script>
 
-<style src="vue-multiselect/dist/vue-multiselect.min.css">
-
-
-</style>
-
 <style scoped>
-    .table-hover{
-        font-family: 'Arial';
-        font-size: 14px;
-    }
-    .table-hover{
-        color: black;
+    .logo {
+        width: 70%;
+        padding:20px 25px;
         text-align: center;
-        width: 100%;
+        display: block;
+        margin: 0 auto;
     }
-    .table-hover thead tr,.table-hover thead:hover tr{
-        background-image:linear-gradient(to right, #0d76d0 , #04235d)!important;
-    }
-    .table-hover thead th{
-        color:#fff;
+    .container-fluid{
+        height: 100%;
         text-align: center;
-        border-right:1px solid #ccc;
     }
-.table-hover th{
-    text-align: center;
-}
-    .table-hover td,.table-hover th{
-        border-right:1px solid #ccc;
+    .boxwallet{
+        padding-left: 0px;
     }
-    .table-hover tr:nth-child(even){
-background: #dcdbff;
-    }
-    .table-hover  tr:hover{
-        background: #a6b6f3!important;
-    }
-    tr {
-        width: max-content;
-    }
+    .boxwallet li{
+        display: inline-block;
+        width: calc(100% / 3);
+        padding:0px 25px;
+        text-align: center;
+        margin-bottom: 15px;
 
-    .container-fluid {
-        text-align: center;
+
+    }
+    .boxwallet li .address{
+        background: rgba(255,255,255,0.7);
+        padding: 15px ;
+        border-radius: 8px;
+        word-break: break-all;
+        margin-bottom: 15px;
+    }
+    .boxwallet li .address span{
+        font-weight: bold;
+        color:red;
     }
     .btn-success {
         width: 50%;
     }
-    .multiselect{
-        width: 600px;
-        transform: translateX(-50%);
-        left: 50%;
-    }
-.select-cus{
-    margin-top: 15px;
-}
+
 </style>
