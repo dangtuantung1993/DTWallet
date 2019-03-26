@@ -1,9 +1,12 @@
 import Vue from 'vue'
 import App from './App.vue'
-import 'bootstrap/dist/css/bootstrap.min.css'
+import BootstrapVue from 'bootstrap-vue'
+Vue.use(BootstrapVue)
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+Vue.config.productionTip = false
 import VeeValidate from 'vee-validate'
 Vue.use(VeeValidate)
-Vue.config.productionTip = false
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 import router from '@/router/router'

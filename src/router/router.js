@@ -5,11 +5,13 @@ import BITCOIN from "../components/BITCOIN"
 import Home from "../components/Home"
 
 
+
 const routes = [
     {path: '/eth', component: ETHEREUM},
     {path:'/neo',component: NEO},
     {path:'/btc',component:BITCOIN},
     {path:'/',component: Home},
+
 
 
 ]

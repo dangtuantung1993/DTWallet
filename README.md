@@ -1,4 +1,4 @@
-# dtwallet
+# vueapp
 
 ## Project setup
 ```

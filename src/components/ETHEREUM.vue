@@ -5,8 +5,9 @@
         </div>
        <div class="row">
             <div class="col-lg-12" >
-                <ul class="boxwallet" data-toggle="modal" data-target="#myModal">
-                    <li v-for="wallet in wallets" :key="wallet.ethers.address" >
+                <ul class="boxwallet">
+                    <li v-for="(wallet,index) in wallets"
+                        :key="index">
                         <div class="address" v-if="wallet.tokens" >
                             <label>{{wallet.ethers.address}}</label>
                             <div>
@@ -14,6 +15,32 @@
                                 <span>{{wallet.ethers.ETH.balance}}</span>
                             </div>
                             <div>{{wallet.tokens.length}}</div>
+                            <b-button v-b-modal="modalId(index)">Xem Chi Tiết</b-button>
+                            <b-modal :id="'modal' + index" title="Balance" ok-only>
+                                <div class="scroll-table">
+                                    <table class="table-balance">
+                                        <tbody>
+                                        <tr v-for="(token,index) in wallet.tokens" :key="index">
+                                            <td class="td-long">
+                                                {{token.tokenInfo.name}}
+                                            </td>
+                                            <td class="td-short">
+                                               <div>
+                                                   <span>{{(token.balance/(Math.pow(10, parseInt(token.tokenInfo.decimals)))).toFixed(2)}}</span>
+                                                   <span>{{token.tokenInfo.symbol}}</span>
+                                               </div>
+                                                <div v-if="token.tokenInfo.price.diff">
+                                                    <span class="color-3">${{(((token.balance/(Math.pow(10, parseInt(token.tokenInfo.decimals)))).toFixed(2))*(token.tokenInfo.price.rate)).toFixed(2)}}</span>
+                                                    <span class="color-4">({{token.tokenInfo.price.diff}}%)</span>
+                                                </div>
+                                            </td>
+
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </b-modal>
                         </div>
 
                     </li>
@@ -95,6 +122,7 @@
                     await this.wait(5000)
                 }
 
+
             },
             checkForm() {
                 this.error = []
@@ -107,7 +135,11 @@
                 this.ethers = eth
                 this.tokens = eth.tokens
                 this.wallets.push({ ethers: eth, tokens: eth.tokens})
+
             },
+            modalId(index) {
+                return 'modal' + index;
+            }
 
         },
     }
@@ -152,5 +184,44 @@
     .btn-success {
         width: 50%;
     }
+    .table-balance{
+        width:100%;
 
+    }
+    .table-balance tr:hover{
+        background: #797979!important;
+    }
+.table-balance tr:nth-child(odd){
+background: #1f1d1d;
+}
+    .table-balance tr:nth-child(even){
+        background: #57575a;
+    }
+    .table-balance tr td{
+        padding:6px 10px;
+        color:#fff;
+    }
+    .table-balance tr td span{
+       font-weight: normal!important;
+        color: #fff!important;
+        padding-left: 5px;
+    }
+    .table-balance tr td.td-long{
+        min-width: 200px;
+        text-align: left;
+    }
+    .table-balance tr td.td-short{
+        max-width: 250px;
+        text-align: right;
+    }
+    .table-balance tr td .color-4{
+        color: #14e614  !important;
+    }
+    .table-balance tr td .color-3{
+        color: #b9aeae !important;
+    }
+    .scroll-table{
+        height:360px;
+        overflow-y: auto;
+    }
 </style>
